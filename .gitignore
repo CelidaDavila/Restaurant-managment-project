@@ -1,12 +1,15 @@
 HELP.md
+
+# Backend / Maven
 target/
+**/target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-## Application properties
+# Application properties
 **/application.properties
 
-### STS ###
+# STS
 .apt_generated
 .classpath
 .factorypath
@@ -15,28 +18,34 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA
+.idea/
+**/.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 build/
+**/build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+**/.vscode/
 
-/target/
-/.idea/
-*.iml
+# Frontend / Node
+node_modules/
+**/node_modules/
+
+# Logs / env / system
 *.log
 .DS_Store
 .env
+**/.env
