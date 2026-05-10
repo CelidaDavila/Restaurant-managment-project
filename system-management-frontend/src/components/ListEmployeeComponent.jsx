@@ -1,24 +1,38 @@
 import React, {useEffect, useState} from 'react'
-import { listEmployees } from '../services/EmployeeService'
+import { deleteEmployee, listEmployees } from '../services/EmployeeService'
 import { useNavigate } from 'react-router-dom'
 
 const ListEmployeeComponent = () => {
 
   const [employees, setEmployees] = useState([])
-
   const navigator = useNavigate();
 
   useEffect(() => {
+    getAllEmployees();
+  }, [])
+
+  function getAllEmployees() {
     listEmployees().then((response) => {
       setEmployees(response.data);
     }).catch(error => {
       console.error(error);
     })
-
-  }, [])
+  }
 
   function addNewEmployee() {
     navigator('/add-employee')
+  }
+
+  function updateEmployee(id) {
+    navigator(`/edit-employee/${id}`)
+  }
+
+  function removeEmployee(id) {
+    deleteEmployee(id).then((response) => {
+      getAllEmployees();
+    }).catch(error => {
+      console.error(error);
+    })
   }
 
   return (
@@ -30,7 +44,7 @@ const ListEmployeeComponent = () => {
       <div className="mb-6 flex justify-start">
         <button 
           onClick={addNewEmployee} 
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:transform active:scale-95"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:transform active:scale-95 cursor-pointer"
         >
           <span className="text-xl">+</span>
           Agregar Nuevo Empleado
@@ -45,7 +59,7 @@ const ListEmployeeComponent = () => {
               <th className="px-6 py-4 font-bold">Nombre</th>
               <th className="px-6 py-4 font-bold">Apellido</th>
               <th className="px-6 py-4 font-bold">Rol</th>
-              <th className="px-6 py-4 font-bold text-right">Acciones</th>
+              <th className="px-6 py-4 font-bold text-center">Acciones</th>
             </tr>
           </thead>
           
@@ -66,13 +80,21 @@ const ListEmployeeComponent = () => {
                     {employee.roleName}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-blue-600 hover:text-blue-900 font-medium mr-3 transition-colors">
-                    Editar
-                  </button>
-                  <button className="text-red-600 hover:text-red-900 font-medium transition-colors">
-                    Eliminar
-                  </button>
+                {/* Estilización de los botones de acción */}
+                <td className="px-6 py-4 text-center">
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() => updateEmployee(employee.id)}
+                      className="px-3 py-1 bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white rounded-md font-medium transition-all duration-200 cursor-pointer"
+                    >
+                      Editar
+                    </button>
+                    <button 
+                      onClick={() => removeEmployee(employee.id)}
+                      className="px-3 py-1 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white rounded-md font-medium transition-all duration-200 cursor-pointer">
+                      Eliminar
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
