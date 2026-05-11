@@ -3,6 +3,7 @@ import { deleteMenuItem, listMenuItems } from '../services/MenuItemService'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ConfirmModal from './ConfirmModal'
 import Toast from './Toast'
+import platilloImg from '../assets/platillo.jfif'
 
 const ListMenuItemComponent = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -74,14 +75,18 @@ const ListMenuItemComponent = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {menuItems.map(item => (
           <div 
             key={item.id} 
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col max-w-[240px] mx-auto w-full"
+            className="bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col max-w-[280px] mx-auto w-full"
           >
-            <div className="h-52 bg-gray-50 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">
-              🍲
+            <div className="h-48 bg-gray-100 overflow-hidden">
+              <img
+                src={platilloImg}
+                alt={item.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
             </div>
             
             <div className="p-4 flex flex-col flex-grow">
@@ -96,16 +101,16 @@ const ListMenuItemComponent = () => {
                   ${item.price.toFixed(2)}
                 </span>
               </div>
-              <div className="flex flex-col gap-2 pt-3 border-t border-gray-50 mt-auto">
+              <div className="flex gap-2 pt-4 border-t border-gray-100 mt-auto">
                 <button 
                   onClick={() => updateMenuItem(item.id)}
-                  className="w-full py-2 bg-gray-50 text-gray-500 font-bold rounded-lg hover:bg-blue-600 hover:text-white transition-all cursor-pointer text-[10px] uppercase tracking-tighter"
+                  className="w-full py-2 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-blue-600 hover:text-white transition-all cursor-pointer text-xs uppercase"
                 >
                   Editar
                 </button>
                 <button 
                   onClick={() => removeMenuItem(item.id)}
-                  className="w-full py-2 bg-gray-50 text-red-300 font-bold rounded-lg hover:bg-red-500 hover:text-white transition-all cursor-pointer text-[10px] uppercase tracking-tighter"
+                  className="w-full py-2 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white transition-all cursor-pointer text-xs uppercase"
                 >
                   Eliminar
                 </button>
