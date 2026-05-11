@@ -83,7 +83,7 @@ const SaleComponent = () => {
         setCart([]);
         setEmployeeId('');
         setErrors({});
-        navigator('/sales-history', { state: { message: '¡Venta finalizada y guardada con éxito!' } });
+        navigator('/sales', { state: { message: '¡Venta finalizada y guardada con éxito!' } });
       }).catch(error => console.error(error));
     }
   }
