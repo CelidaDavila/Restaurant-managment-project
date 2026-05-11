@@ -4,18 +4,23 @@ import com.systemmanagment.backend.dto.SupplierDto;
 import com.systemmanagment.backend.entity.Supplier;
 
 public class SupplierMapper {
-
     public static SupplierDto mapToSupplierDto(Supplier supplier) {
         return new SupplierDto(
                 supplier.getId(),
-                supplier.getName()
+                supplier.getName(),
+                supplier.getPhone(),
+                supplier.getEmail(),
+                supplier.getAddress()
         );
     }
 
     public static Supplier mapToSupplier(SupplierDto supplierDto) {
         return new Supplier(
                 supplierDto.getId(),
-                supplierDto.getName()
+                supplierDto.getName(),
+                supplierDto.getPhone(),
+                supplierDto.getEmail(),
+                supplierDto.getAddress()
         );
     }
 }

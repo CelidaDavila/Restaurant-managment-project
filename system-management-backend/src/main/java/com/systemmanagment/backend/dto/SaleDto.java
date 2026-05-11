@@ -1,20 +1,19 @@
 package com.systemmanagment.backend.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import java.time.LocalDate;
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaleDto {
     private Long id;
-    private LocalDate date;
-    private Double total;
     private Long employeeId;
     private String employeeName;
+    private LocalDateTime saleDate;
+    private Double totalAmount;
+    private List<SaleDetailDto> saleDetails;
 }

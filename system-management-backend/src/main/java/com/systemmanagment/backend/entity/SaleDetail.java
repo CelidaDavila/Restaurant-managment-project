@@ -17,19 +17,16 @@ public class SaleDetail {
     @EmbeddedId
     private SaleDetailId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("saleId")
     @JoinColumn(name = "sale_id")
     private Sale sale;
 
-    @ManyToOne
-    @MapsId("itemId")
-    @JoinColumn(name = "item_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("menuItemId")
+    @JoinColumn(name = "menu_item_id")
     private MenuItem menuItem;
 
-    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-
-    @Column(name = "subtotal", nullable = false)
-    private Double subtotal;
+    private Double price;
 }

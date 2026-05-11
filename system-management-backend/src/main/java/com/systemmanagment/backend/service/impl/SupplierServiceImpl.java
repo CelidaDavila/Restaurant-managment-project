@@ -50,6 +50,9 @@ public class SupplierServiceImpl implements SupplierService {
         );
 
         supplier.setName(updatedSupplier.getName());
+        supplier.setPhone(updatedSupplier.getPhone());
+        supplier.setEmail(updatedSupplier.getEmail());
+        supplier.setAddress(updatedSupplier.getAddress());
 
         Supplier updatedSupplierObj = supplierRepository.save(supplier);
 

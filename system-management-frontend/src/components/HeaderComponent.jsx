@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useAsyncValue, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const HeaderComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -12,9 +14,14 @@ const HeaderComponent = () => {
           {/* Logo y Nombre */}
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center cursor-pointer">
-              <span className="font-bold text-xl tracking-tight text-blue-600">
+              <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-blue-600">
+              <img 
+                src={logo}
+                alt="Logo Faro del Mar" 
+                className="w-10 h-10 object-cover rounded-md"
+              />
                 Faro del mar
-              </span>
+              </Link>
             </div>
             
             {/* Links Escritorio */}
@@ -22,24 +29,27 @@ const HeaderComponent = () => {
               <Link to="/employees" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
                 Empleados
               </Link>
-              <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
+              <Link to="/menu" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
                 Menú
               </Link>
-              <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
+              <Link to="/inventory" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
                 Inventario
               </Link>
-              <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
+              <Link to="/sales" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
                 Ventas
               </Link>
-              <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
-                Proovedores
+              <Link to="/suppliers" className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
+                Provedores
               </Link>
             </div>
           </div>
 
           {/* Perfil / Acciones derecha */}
           <div className="hidden md:flex items-center">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-shadow shadow-md">
+            <button
+              onClick={() => navigate('/add-sale')}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-shadow shadow-md"
+            >
               Nueva Venta
             </button>
             <div className="ml-4 flex items-center">
@@ -66,10 +76,10 @@ const HeaderComponent = () => {
         <div className="md:hidden bg-white border-t border-gray-100 animate-fade-in-down">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link to="/employees" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Empleados</Link>
-            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Menú</Link>
-            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Inventario</Link>
-            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Ventas</Link>
-            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Proveedores</Link>
+            <Link to="/menu" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Menú</Link>
+            <Link to="/inventory" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Inventario</Link>
+            <Link to="/sales" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Ventas</Link>
+            <Link to="/suppliers" className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Proveedores</Link>
           </div>
         </div>
       )}

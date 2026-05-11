@@ -1,15 +1,14 @@
 package com.systemmanagment.backend.service.impl;
 
 import com.systemmanagment.backend.dto.SaleDto;
-import com.systemmanagment.backend.entity.Employee;
-import com.systemmanagment.backend.entity.Sale;
+import com.systemmanagment.backend.entity.*;
 import com.systemmanagment.backend.exception.ResourceNotFoundException;
 import com.systemmanagment.backend.mapper.SaleMapper;
-import com.systemmanagment.backend.repository.EmployeeRepository;
-import com.systemmanagment.backend.repository.SaleRepository;
+import com.systemmanagment.backend.repository.*;
 import com.systemmanagment.backend.service.SaleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,74 +17,70 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SaleServiceImpl implements SaleService {
 
-    private SaleRepository saleRepository;
-    private EmployeeRepository employeeRepository;
+    private final SaleRepository saleRepository;
+    private final EmployeeRepository employeeRepository;
+    private final MenuItemRepository menuItemRepository;
 
     @Override
+    @Transactional
     public SaleDto createSale(SaleDto saleDto) {
+        Sale sale = SaleMapper.mapToSale(saleDto);
 
-        Employee employee = null;
+        Employee employee = employeeRepository.findById(saleDto.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado con ID: " + saleDto.getEmployeeId()));
+        sale.setEmployee(employee);
 
-        if (saleDto.getEmployeeId() != null) {
-            employee = employeeRepository.findById(saleDto.getEmployeeId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Employee does not exist with given ID: " + saleDto.getEmployeeId())
-            );
+        if (saleDto.getSaleDetails() != null) {
+            List<SaleDetail> details = saleDto.getSaleDetails().stream().map(dto -> {
+                SaleDetail detail = new SaleDetail();
+                MenuItem item = menuItemRepository.findById(dto.getMenuItemId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Platillo no encontrado ID: " + dto.getMenuItemId()));
+
+                detail.setMenuItem(item);
+                detail.setSale(sale);
+                detail.setQuantity(dto.getQuantity());
+                detail.setPrice(dto.getPrice());
+                detail.setId(new SaleDetailId(null, item.getId()));
+                return detail;
+            }).collect(Collectors.toList());
+
+            sale.setSaleDetails(details);
         }
 
-        Sale sale = SaleMapper.mapToSale(saleDto, employee);
         Sale savedSale = saleRepository.save(sale);
-
         return SaleMapper.mapToSaleDto(savedSale);
     }
 
     @Override
-    public SaleDto getSaleById(Long saleId) {
-        Sale sale = saleRepository.findById(saleId).orElseThrow(
-                () -> new ResourceNotFoundException("Sale does not exist with given ID: " + saleId)
-        );
+    public List<SaleDto> getAllSales() {
+        return saleRepository.findAll().stream().map(SaleMapper::mapToSaleDto).collect(Collectors.toList());
+    }
 
+    @Override
+    public SaleDto getSaleById(Long saleId) {
+        Sale sale = saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con ID: " + saleId));
         return SaleMapper.mapToSaleDto(sale);
     }
 
     @Override
-    public List<SaleDto> getAllSales() {
-        List<Sale> sales = saleRepository.findAll();
+    @Transactional
+    public SaleDto updateSale(Long saleId, SaleDto updatedSaleDto) {
+        Sale sale = saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con ID: " + saleId));
+        Employee employee = employeeRepository.findById(updatedSaleDto.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado"));
 
-        return sales.stream()
-                .map((sale) -> SaleMapper.mapToSaleDto(sale))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public SaleDto updateSale(Long saleId, SaleDto updatedSale) {
-
-        Sale sale = saleRepository.findById(saleId).orElseThrow(
-                () -> new ResourceNotFoundException("Sale does not exist with given ID: " + saleId)
-        );
-
-        Employee employee = null;
-
-        if (updatedSale.getEmployeeId() != null) {
-            employee = employeeRepository.findById(updatedSale.getEmployeeId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Employee does not exist with given ID: " + updatedSale.getEmployeeId())
-            );
-        }
-
-        sale.setDate(updatedSale.getDate());
-        sale.setTotal(updatedSale.getTotal());
         sale.setEmployee(employee);
-
-        Sale updatedSaleObj = saleRepository.save(sale);
-
-        return SaleMapper.mapToSaleDto(updatedSaleObj);
+        sale.setTotalAmount(updatedSaleDto.getTotalAmount());
+        return SaleMapper.mapToSaleDto(saleRepository.save(sale));
     }
 
     @Override
+    @Transactional
     public void deleteSale(Long saleId) {
-        Sale sale = saleRepository.findById(saleId).orElseThrow(
-                () -> new ResourceNotFoundException("Sale does not exist with given ID: " + saleId)
-        );
-
-        saleRepository.deleteById(saleId);
+        Sale sale = saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con ID: " + saleId));
+        saleRepository.delete(sale);
     }
 }

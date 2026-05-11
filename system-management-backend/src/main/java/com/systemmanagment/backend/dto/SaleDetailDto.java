@@ -1,18 +1,15 @@
 package com.systemmanagment.backend.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaleDetailDto {
-    private Long saleId;
-    private Long itemId;
-    private String itemName;
+    private Long menuItemId;
+    private String menuItemName;
     private Integer quantity;
-    private Double subtotal;
+    private Double price;
 }

@@ -23,4 +23,7 @@ public class MenuItem {
 
     @Column(name = "price", nullable = false)
     private Double price;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 }

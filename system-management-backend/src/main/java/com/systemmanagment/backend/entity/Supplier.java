@@ -20,4 +20,13 @@ public class Supplier {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "address")
+    private String address;
 }
